@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#0AC1CB',
     paddingHorizontal: 15,
-    color: '#fff',
+    color: '#000',
     marginBottom: 20,
+    
   },
 });
