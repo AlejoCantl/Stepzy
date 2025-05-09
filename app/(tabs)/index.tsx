@@ -3,13 +3,15 @@ import Button from '@/components/Button';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
+import Label from "@/components/Label";
 
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
+
           source={require('@/assets/images/home.jpg')}
           style={styles.reactLogo}
         />
@@ -24,6 +26,7 @@ export default function HomeScreen() {
        <Button title='Derecha' />
        <Button title='Izquierda' />
        <Button title='Apagar' />
+
       </View>
 
       <View>
@@ -42,17 +45,20 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+
   title:{
     fontSize:30,
     fontWeight:'bold',
     textAlign:'center',
     paddingBottom: 20,
   },
+
   reactLogo: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
+
   container:{
     display:'flex'
   },
@@ -78,5 +84,4 @@ const styles = StyleSheet.create({
     
   },
   
-
 });
