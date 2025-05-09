@@ -1,0 +1,47 @@
+import Logo from '@/components/Logo';
+import { useRouter } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native';
+import Button from '../components/Button';
+import Input from '../components/Input';
+import Label from '../components/Label';
+export default function LoginScreen() {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    // Aquí puedes validar el login más adelante
+    router.push("/(tabs)");
+  };
+  return (
+    <View style={styles.container}>
+      <View style ={styles.containerLogo}>
+      <Logo/>
+      </View>
+      
+      <Label >Motor Paso a Paso</Label>
+      <Text style={styles.text}>Usuario:</Text>
+      <Input placeholder="Usuario" keyboardType="email-address" autoCapitalize="none" />
+      <Text style={styles.text}>Contraseña:</Text>
+      <Input placeholder="Contraseña" secureTextEntry autoCapitalize="none" />
+      <Button title="Ingresar" onPress={handleLogin} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  containerLogo:{
+    paddingTop:10
+  },
+  container: {
+    flex:1,
+    backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    padding:20,
+    paddingTop: 100,
+  },
+  text: {
+    margin:10,
+    paddingLeft:5,
+    fontSize:15,
+    fontWeight: 'bold'
+  }
+});
