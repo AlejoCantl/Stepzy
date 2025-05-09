@@ -11,7 +11,7 @@ export default function LoginScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMostrarFormulario(true);
-    }, 4000); // espera 5 segundos
+    }, 7000); // espera 5 segundos
 
     return () => clearTimeout(timer);
   }, []);
