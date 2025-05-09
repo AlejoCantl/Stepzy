@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
       
     },
     image: {
-      width: 250,
-      height: 150,
+      width: 350,
+      height: 200,
       alignSelf: 'center',
-      marginBottom: 5,
+      marginBottom: 20,
     },
   });

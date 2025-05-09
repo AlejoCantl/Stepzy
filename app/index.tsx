@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Label from '../components/Label';
 export default function LoginScreen() {
   const router = useRouter();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -12,7 +11,7 @@ export default function LoginScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMostrarFormulario(true);
-    }, 7000); // espera 5 segundos
+    }, 4000); // espera 5 segundos
 
     return () => clearTimeout(timer);
   }, []);
@@ -35,8 +34,6 @@ export default function LoginScreen() {
       <View style ={styles.containerLogo}>
       <Logo/>
       </View>
-      
-      <Label >Motor Paso a Paso</Label>
       <Text style={styles.text}>Usuario:</Text>
       <Input placeholder="Usuario" keyboardType="email-address" autoCapitalize="none" />
       <Text style={styles.text}>Contraseña:</Text>
@@ -68,5 +65,6 @@ const styles = StyleSheet.create({
     paddingLeft:5,
     fontSize:15,
     fontWeight: 'bold'
-  }
+  },
+ 
 });
