@@ -1,70 +1,72 @@
 
-import Button from '@/components/Button';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
-import Label from "@/components/Label";
+import React from 'react';
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import ControlMotor from '../modules/home/controlMotor';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-
-          source={require('@/assets/images/home.jpg')}
-          style={styles.reactLogo}
-        />
-      }>
-      <View >
-        <Text style={styles.title}>Motor Paso a Paso</Text>
-      </View>
+    <SafeAreaView>
+      
       <View style={styles.container}>
-
-      <Text style={styles.text}>Motor</Text>
-      <View style={styles.filaMotor}>
-       <Button title='Derecha' />
-       <Button title='Izquierda' />
-       <Button title='Apagar' />
-
+      <View style={styles.containerImage} >
+                <Image
+                resizeMode="contain"
+                style={styles.image}
+                source={require("@/assets/images/logo.png")}
+                />
+            </View>
+      <View style={styles.containTitle}>
+        <Text style={styles.title}>Motor Paso a Paso</Text>
+        <Text style={styles.p}>Monitorea el motor paso a paso y LEDS</Text>
       </View>
 
-      <View>
-        <Text style={styles.text}>LED</Text>
-        <View style={styles.filaLed}>
-        <Button title='LED 1'/>
-        <Button title='LED 2'/>
-        <Button title='LED 3'/>
-        </View>
+      <ControlMotor/>
+
       
       </View>
-      </View>
       
-    </ParallaxScrollView>
+    </SafeAreaView>
+      
   );
 }
 
 const styles = StyleSheet.create({
+  containerImage:{
+    alignItems:'flex-end',
+    justifyContent:'flex-start',
+    display:'flex',
+    padding: 5, // Espacio alrededor del logo
+
+  },
+  image:{
+    width:150,
+    height:80
+  },
+  containTitle:{
+    marginBottom:20
+  },
 
   title:{
     fontSize:30,
     fontWeight:'bold',
-    textAlign:'center',
-    paddingBottom: 20,
+    textAlign:'left',
+    paddingBottom: 5,
+    marginTop:20
+    
   },
-
-  reactLogo: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
+  p:{
+    fontSize:13,
+    color:'grey',
+    marginBottom:30
   },
 
   container:{
-    display:'flex'
+    display:'flex',
+    margin:10
   },
   text:{
     fontSize:20,
-    fontWeight:'bold'
+    fontWeight:'bold',
   },
   filaMotor: {
     flexDirection: 'row',
