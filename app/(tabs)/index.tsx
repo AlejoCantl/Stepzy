@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import ControlMotor from '../modules/home/controlMotor';
+import ControlMotor from '../../modules/home/controlMotor';
 
 export default function HomeScreen() {
   return (
@@ -10,7 +10,7 @@ export default function HomeScreen() {
       <View style={styles.container}>
       <View style={styles.containerImage} >
                 <Image
-                resizeMode="contain"
+                
                 style={styles.image}
                 source={require("@/assets/images/logo.png")}
                 />

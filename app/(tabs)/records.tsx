@@ -1,39 +1,97 @@
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { Image } from "expo-image";
-import { StyleSheet, Text, View } from "react-native";
+import Records from "@/modules/records/records";
+import { Image  } from "expo-image";
+import { StyleSheet, Text, View,SafeAreaView } from "react-native";
+import Button from "@/components/Button";
 
 export default function TabTwoScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <View>
-        <Text>registros</Text>
-      </View>
-    </ParallaxScrollView>
-  );
-}
+  return(
+  <SafeAreaView>
+        
+        <View style={styles.container}>
+        <View style={styles.containerImage} >
+                  <Image
+                  
+                  style={styles.image}
+                  source={require("@/assets/images/logo.png")}
+                  />
+              </View>
+        <View style={styles.containTitle}>
+          <Text style={styles.title}>Motor Paso a Paso</Text>
+          <Text style={styles.p}>Registros de accion.</Text>
+        </View>
+        <Records/>
+        <View style={styles.button}>
+        <Button title="Imprimir"/>
+        </View>
+        
+        </View>
+        
+      </SafeAreaView>
+        
+    );
+  }
+  
+  const styles = StyleSheet.create({
+    containerImage:{
+      alignItems:'flex-end',
+      justifyContent:'flex-start',
+      display:'flex',
+      padding: 5, // Espacio alrededor del logo
+  
+    },
+    image:{
+      width:150,
+      height:80
+    },
+    containTitle:{
+      marginBottom:20
+    },
+  
+    title:{
+      fontSize:30,
+      fontWeight:'bold',
+      textAlign:'left',
+      paddingBottom: 5,
+      marginTop:20
+      
+    },
+    p:{
+      fontSize:13,
+      color:'grey',
+      marginBottom:30
+    },
+  
+    container:{
+      display:'flex',
+      margin:10
+    },
+    text:{
+      fontSize:20,
+      fontWeight:'bold',
+    },
+    filaMotor: {
+      flexDirection: 'row',
+      justifyContent: 'space-around', 
+      alignItems: 'center',
+      gap: 10, 
+      marginVertical: 10,
+      paddingBottom:25,
+      
+    },
+    filaLed: {
+      justifyContent: 'space-around', 
+      alignItems: 'center',
+      gap: 10, 
+      marginVertical: 10,
+      paddingBottom:25,
+      
+    },
+    button:{
+      marginTop:20,
+      marginBottom:10
+    }
+    
+  });
+  
 
-const styles = StyleSheet.create({
-  reactLogo: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
-  titleContainer: {
-    flexDirection: "row",
-    gap: 8,
-  },
-});
+
