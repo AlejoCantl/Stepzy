@@ -7,16 +7,14 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#0AC1CB",
+        tabBarActiveTintColor: "#fff",
         tabBarBackground: () => (
           <View
             style={{
-              backgroundColor: "white",
+              backgroundColor: "#0AC1CB",
               borderTopRightRadius: 50,
               borderTopLeftRadius: 50,
               flex: 1,
-              borderColor: "#0AC1CB",
-              borderWidth: 2,
               marginBottom: -2,
               marginTop: -15,
             }}
