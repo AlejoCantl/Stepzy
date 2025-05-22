@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+
 export default function LoginScreen() {
   const router = useRouter();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -11,7 +12,7 @@ export default function LoginScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMostrarFormulario(true);
-    }, 7000); // espera 5 segundos
+    }, 8000); // espera 5 segundos
 
     return () => clearTimeout(timer);
   }, []);
