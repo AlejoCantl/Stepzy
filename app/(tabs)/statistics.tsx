@@ -1,10 +1,9 @@
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-
+import { StyleSheet, Text, View, SafeAreaView,ScrollView } from "react-native";
+import Information from "@/components/Infornation";
 export default function Statistics() {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.containerS}>
           
           <View style={styles.container}>
           <View style={styles.containerImage} >
@@ -16,19 +15,22 @@ export default function Statistics() {
                 </View>
           <View style={styles.containTitle}>
             <Text style={styles.title}>Motor Paso a Paso</Text>
-            <Text style={styles.p}>Gráficos para análisis del motor paso a paso y LEDs.</Text>
+            <Text style={styles.p}>Informacion sobre el proyecto</Text>
           </View>
     
-          
-          
-          <Text>hola soy un grafico, y me graficó junior.</Text>
-          
+        <Information/>
+
           </View>
           
         </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
+  containerS:{
+    display:'flex',
+    height:'100%'
+  },
+
   containerImage:{
     alignItems:'flex-end',
     justifyContent:'flex-start',
@@ -82,6 +84,15 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingBottom:25,
     
+  },
+  information:{ 
+    padding:10,
+    fontSize:20,
+  },
+
+  informations:{
+    fontSize:20,
+    fontWeight:'bold', 
   },
   
 });
