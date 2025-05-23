@@ -1,11 +1,10 @@
 import React from "react";
-import { ScrollView, View, Text, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { DataTable } from "react-native-paper";
 
-export default function recordsTable(){
-    const columnas = ["Motor/LED", "Estado", "Origen", "Fecha"];
-  const filas = 30;
-
+export default function recordsTable({ columnasInfo }: any) {
+  const columnas = ["Motor/LED", "Estado", "Fecha"];
+  const valores = columnasInfo;
   return (
     <View>
       <DataTable style={styles.tabla}>
@@ -22,21 +21,21 @@ export default function recordsTable(){
           ))}
         </DataTable.Header>
       </DataTable>
-
-      {/* Scroll vertical */}
       <ScrollView style={{ height: 300 }}>
         <DataTable>
-          {Array.from({ length: filas }).map((_, rowIndex) => (
-            <DataTable.Row key={rowIndex} style={styles.fila}>
-              {columnas.map((_, colIndex) => (
-                <DataTable.Cell
-                  key={colIndex}
-                  style={styles.columna}
-                  textStyle={styles.textoCelda}
-                >
-                  <Text style={styles.textoCelda}> </Text>
-                </DataTable.Cell>
-              ))}
+          {valores?.map((col: any, i: number) => (
+            <DataTable.Row key={i} style={styles.fila}>
+              <Text style={styles.textoCelda}>
+                {col.dispositivo === "MOTOR PASO A PASO"
+                  ? "MOTOR"
+                  : col.dispositivo}
+              </Text>
+              <Text style={styles.textoCeldaM}>{col.accion}</Text>
+              <Text style={styles.textoCeldaF}>
+                {new Date(col.fecha).toLocaleString("es-ES", {
+                  timeZone: "America/Santiago",
+                })}
+              </Text>
             </DataTable.Row>
           ))}
         </DataTable>
@@ -45,27 +44,41 @@ export default function recordsTable(){
   );
 }
 const styles = StyleSheet.create({
-    tabla: {
-      
-      borderRadius: 10,
-      overflow: "hidden",
-    },
-    encabezado: {
-      backgroundColor: "#0AC1CB",
-    },
-    fila: {
-      backgroundColor: "#fff",
-    },
-    columna: {
-      justifyContent: "center",
-      minWidth: 75,
-      paddingHorizontal: 10,
-    },
-    textoEncabezado: {
-      fontWeight: "bold",
-      color: "#fff",
-    },
-    textoCelda: {
-      color: "#000",
-    },
-  });
+  tabla: {
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  encabezado: {
+    backgroundColor: "#0AC1CB",
+  },
+  fila: {
+    backgroundColor: "#fff",
+  },
+  columna: {
+    justifyContent: "center",
+    minWidth: 75,
+    paddingHorizontal: 10,
+  },
+  textoEncabezado: {
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  textoCelda: {
+    color: "#000",
+    fontWeight: "bold",
+    textAlign: "center",
+    width: 90,
+  },
+  textoCeldaM: {
+    color: "#000",
+    fontWeight: "bold",
+    width: 100,
+    textAlign: "right",
+  },
+  textoCeldaF: {
+    color: "#000",
+    fontWeight: "bold",
+    width: 100,
+    textAlign: "right",
+  },
+});
