@@ -58,7 +58,26 @@ export default function controlMotor() {
         .catch((error) => {
           console.error("Error:", error);
         });
+    }else if (accion === 4 || accion===3) {
+      fetch("https://stepper-software.vercel.app/api/data/sendData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accion: 2,
+          dispositivo: 2,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
+    
   };
 
   const encender = (led: number) => {
