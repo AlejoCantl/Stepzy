@@ -1,10 +1,31 @@
 import Button from "@/components/Button";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function controlMotor() {
+    const [direccionActual, setDireccionActual] = useState<null | string>(null);
+
   const mover = (direccion: string) => {
-    if (direccion === "derecha") {
+     if (direccion === direccionActual) {
+      fetch("https://stepper-software.vercel.app/api/data/sendData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accion: 2, 
+          dispositivo: 2,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          setDireccionActual(null);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else if (direccion === "derecha") {
       fetch("https://stepper-software.vercel.app/api/data/sendData", {
         method: "POST",
         headers: {
@@ -18,6 +39,7 @@ export default function controlMotor() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
+          setDireccionActual("derecha");
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -36,6 +58,7 @@ export default function controlMotor() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
+          setDireccionActual("izquierda");
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -54,11 +77,13 @@ export default function controlMotor() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
+          setDireccionActual(null);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
-    }
+      }
+    
   };
 
   const encender = (led: number) => {
