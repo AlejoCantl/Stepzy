@@ -86,8 +86,30 @@ export default function controlMotor() {
     
   };
 
+  const [ledActual, setLedActual] = useState<null | string>(null);
+
   const encender = (led: number) => {
-    fetch("https://stepper-software.vercel.app/api/data/sendData", {
+
+    if (ledActual === "encendido"){
+         fetch("https://stepper-software.vercel.app/api/data/sendData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accion: 2,
+          dispositivo: led,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          setLedActual(null);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      }else {fetch("https://stepper-software.vercel.app/api/data/sendData", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,10 +122,12 @@ export default function controlMotor() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        setLedActual("encendido");
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+      }
   };
 
   return (
