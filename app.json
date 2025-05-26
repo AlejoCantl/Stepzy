@@ -49,6 +49,12 @@
         "projectId": "b4399e30-0312-4266-a8b3-579793b21391"
       }
     },
-    "owner": "alexcantillo"
+    "owner": "alexcantillo",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b4399e30-0312-4266-a8b3-579793b21391"
+    }
   }
 }
