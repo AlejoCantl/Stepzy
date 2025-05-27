@@ -19,6 +19,7 @@ const MAPPING = {
   'folder.circle.fill': 'folder',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'info.circle.fill': 'info',
 } as IconMapping;
 
 /**

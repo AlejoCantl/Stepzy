@@ -1,166 +1,232 @@
 import Button from "@/components/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default function controlMotor() {
-    const [direccionActual, setDireccionActual] = useState<null | string>(null);
+type DataSchemaType = number | string | boolean | null | undefined | Date | ArrayBuffer;
+type DataSchema = {
+    [key: string]: DataSchemaType;
+};
 
-  const mover = (direccion: string) => {
-     if (direccion === direccionActual) {
-      fetch("https://stepper-software.vercel.app/api/data/sendData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accion: 2, 
-          dispositivo: 2,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          setDireccionActual(null);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
+// Constantes
+const ENCENDIDO = 'Encendido';
+const APAGADO = 'Apagado';
+const IZQUIERDA = 'Izquierda';
+const DERECHA = 'Derecha';
+
+// Mapeos
+const Actiondata: DataSchema = {
+  [IZQUIERDA]: 3,
+  [DERECHA]: 4,
+  [ENCENDIDO]: 1,
+  [APAGADO]: 2,
+};
+
+const DispositivoData: DataSchema = {
+  Motor: 2,
+  LED: 1,
+  LED2: 3,
+  LED3: 4,
+};
+
+const accionMap: Record<string, string> = {
+  'APAGADO': APAGADO,
+  'ENCENDIDO': ENCENDIDO,
+  'GIRA A LA IZQUIERDA': IZQUIERDA,
+  'GIRA A LA DERECHA': DERECHA,
+};
+
+const getData = async (url: string, metodo: string, prop: Record<string, any>) => {
+    try {
+        if (!["GET", "POST", "PUT", "DELETE", "PATCH"].includes(metodo.toUpperCase())) {
+            throw new Error(`Método HTTP no válido: ${metodo}`);
+        }
+
+        const queryString = metodo.toUpperCase() === "GET" ? `?${new URLSearchParams(prop).toString()}` : "";
+
+        const res = await fetch(`${url}${queryString}`, {
+            method: metodo,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: metodo.toUpperCase() !== "GET" ? JSON.stringify(prop) : undefined,
         });
-    } else if (direccion === "derecha") {
-      fetch("https://stepper-software.vercel.app/api/data/sendData", {
-        method: "POST",
+        return res.json();
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error;
+    }
+};
+
+const insertData = async (url: string, metodo: string, data: DataSchema) => {
+    const {accion, dispositivo} = data;
+    const body = JSON.stringify({ accion, dispositivo });
+    try {
+        if (!["GET", "POST", "PUT", "DELETE", "PATCH"].includes(metodo.toUpperCase())) {
+            throw new Error(`Método HTTP no válido: ${metodo}`);
+        }
+    const res = await fetch(url, {
+        method: metodo,
         headers: {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          accion: 4,
-          dispositivo: 2,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          setDireccionActual("derecha");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    } else if (direccion === "izquierda") {
-      fetch("https://stepper-software.vercel.app/api/data/sendData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accion: 3,
-          dispositivo: 2,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          setDireccionActual("izquierda");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    } else if (direccion === "apagar") {
-      fetch("https://stepper-software.vercel.app/api/data/sendData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accion: 2,
-          dispositivo: 2,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          setDireccionActual(null);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+        body: body,
+    });
+    if (!res.ok) {
+        throw new Error("Error en la solicitud");
+    }
+    return res.json();
+} catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error;
+    }
+}
+
+
+const sendDataQuery = async (data: DataSchema) => {
+    insertData( "https://stepper-software.vercel.app/api/data/sendData", "POST", data);
+    console.log("Data sent:", data);
+    return data;
+}
+
+
+
+const getDataByQuery = async (idDispositivo: DataSchema) => {
+    const data = await getData( "https://stepper-software.vercel.app/api/data/getDataBy", "GET", idDispositivo);
+    console.log("Data received:", data);
+    return data;
+}
+
+
+
+export default function ControlMotor() {
+  const [status, setStatus] = useState<string>(APAGADO);
+  const [ledStatus, setLedStatus] = useState<string>(APAGADO);
+  const [led2Status, setLed2Status] = useState<string>(APAGADO);
+  const [led3Status, setLed3Status] = useState<string>(APAGADO);
+
+  // Obtener estado inicial del motor y LEDs
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        const responseMotor = await getDataByQuery({ idDispositivo: DispositivoData.Motor });
+        const responseLED = await getDataByQuery({ idDispositivo: DispositivoData.LED });
+        const responseLED2 = await getDataByQuery({ idDispositivo: DispositivoData.LED2 });
+        const responseLED3 = await getDataByQuery({ idDispositivo: DispositivoData.LED3 });
+        const motorData = responseMotor?.message ?? [];
+        const ledData = responseLED?.message ?? [];
+        const ledData2 = responseLED2?.message ?? [];
+        const ledData3 = responseLED3?.message ?? [];
+        if (motorData.length > 0 && motorData[0]?.accion) {
+          const motorMappedStatus = accionMap[motorData[0].accion] ?? APAGADO;
+          if (isMounted) setStatus(motorMappedStatus);
+        }
+
+        if (ledData.length > 0 && ledData[0]?.accion) {
+          const ledMappedStatus = accionMap[ledData[0].accion] ?? APAGADO;
+          if (isMounted) setLedStatus(ledMappedStatus);
+        }
+
+        if (ledData2.length > 0 && ledData2[0]?.accion) {
+          const ledMappedStatus2 = accionMap[ledData2[0].accion] ?? APAGADO;
+          if (isMounted) setLed2Status(ledMappedStatus2);
+        }
+
+        if (ledData3.length > 0 && ledData3[0]?.accion) {
+          const ledMappedStatus3 = accionMap[ledData3[0].accion] ?? APAGADO;
+          if (isMounted) setLed3Status(ledMappedStatus3);
+        }
+
+      } catch (err) {
+        console.error("Error cargando estado inicial:", err);
       }
-    
+    };
+
+    fetchData();
+    const intervalId = setInterval(fetchData, 5000);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  const handlePress = async (action: string, dispositivo: string) => {
+    let accionFinal = action;
+    let VPIN = "";
+    switch (dispositivo) {
+      case 'Motor':
+        if (status === action) {
+          accionFinal = APAGADO;
+          setStatus(APAGADO);
+        } else {
+          setStatus(action);
+        }
+        break;
+
+      case 'LED':
+        if (ledStatus === ENCENDIDO) {
+          accionFinal = APAGADO;
+          setLedStatus(APAGADO);
+        } else {
+          accionFinal = ENCENDIDO;
+          setLedStatus(ENCENDIDO);
+        }
+        break;
+
+      case 'LED2':
+        if (led2Status === ENCENDIDO) {
+          accionFinal = APAGADO;
+          setLed2Status(APAGADO);
+        } else {
+          accionFinal = ENCENDIDO;
+          setLed2Status(ENCENDIDO);
+        }
+        break;
+      case 'LED3':
+        if (led3Status === ENCENDIDO) {
+          accionFinal = APAGADO;
+          setLed3Status(APAGADO);
+        } else {
+          accionFinal = ENCENDIDO;
+          setLed3Status(ENCENDIDO);
+        }
+        break;
+
+      default:
+        console.error('Dispositivo no reconocido');
+        return;
+    }
+
+    const result = await sendDataQuery({
+      accion: Actiondata[accionFinal],
+      dispositivo: DispositivoData[dispositivo],
+    });
+
+    console.log(`Resultado de la consulta: ${result}`);
   };
 
-  const [ledActual, setLedActual] = useState<null | string>(null);
-
-  const encender = (led: number) => {
-
-    if (ledActual === "encendido"){
-         fetch("https://stepper-software.vercel.app/api/data/sendData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accion: 2,
-          dispositivo: led,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          setLedActual(null);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      }else {fetch("https://stepper-software.vercel.app/api/data/sendData", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        accion: 1,
-        dispositivo: led,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-        setLedActual("encendido");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-      }
-  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.containerMotor}>
         <Text style={styles.text}>Motor</Text>
         <View style={styles.filaMotor}>
-          <Button
-            onPress={() => {
-              mover("derecha");
-            }}
-            title="Derecha"
-          />
-          <Button
-            onPress={() => {
-              mover("izquierda");
-            }}
-            title="Izquierda"
-          />
-          <Button
-            onPress={() => {
-              mover("apagar");
-            }}
-            title="Apagar"
-          />
+          <Button title={`${status === IZQUIERDA ? 'Apagar' : 'Izquierda'}`} onPress={() => handlePress(IZQUIERDA, 'Motor')} />
+          <Button title={`${status === DERECHA ? 'Apagar' : 'Derecha'}`} onPress={() => handlePress(DERECHA, 'Motor')} />
         </View>
       </View>
+
       <View style={styles.containerMotor}>
         <Text style={styles.text}>LED</Text>
         <View style={styles.filaLed}>
-          <Button onPress={() => encender(1)} title="LED 1" />
-          <Button onPress={() => encender(3)} title="LED 2" />
-          <Button onPress={() => encender(4)} title="LED 3" />
+          {[1, 3, 4].map((id) => (
+            <Button
+              key={id}
+              title={`LED ${(id === 1 ? 1 : (id === 3 ? 2 : (id === 4 ? 3: '')))} ${(ledStatus === ENCENDIDO && id === 1) || (led2Status === ENCENDIDO && id === 3) || (led3Status === ENCENDIDO && id === 4) ? 'OFF' : 'ON'}`}
+              onPress={() => handlePress(ledStatus === ENCENDIDO ? APAGADO : ENCENDIDO, `LED${(id === 1 ? '' : (id === 3 ? 2 : (id === 4 ? 3: '')))}`)}
+            />
+          ))}
         </View>
       </View>
     </ScrollView>
@@ -194,6 +260,7 @@ const styles = StyleSheet.create({
   },
   filaLed: {
     justifyContent: "space-around",
+    flexDirection: "row",
     alignItems: "center",
     gap: 10,
     marginVertical: 10,
